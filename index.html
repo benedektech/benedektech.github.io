@@ -2,199 +2,241 @@
 <html lang="hu">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BenedekTech - YouTube Csatorna</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>benedek.tech</title>
     <style>
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
+        :root {
+            --bg: #030303;
+            --text: #ffffff;
+            --accent: #ff0033;
+            --accent-glow: rgba(255, 0, 51, 0.25);
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .glow-bg {
+            position: absolute;
+            width: 60vmax;
+            height: 60vmax;
+            background: radial-gradient(circle, #151515 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            animation: pulse 10s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .container {
+            text-align: center;
+            z-index: 2;
+            padding: 20px;
+            width: 100%;
+            max-width: 600px;
+            opacity: 0;
+            animation: fadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 15px;
+            background: linear-gradient(180deg, #fff 0%, #666 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p {
+            font-size: clamp(0.9rem, 4vw, 1.1rem);
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: 50px;
+            font-weight: 400;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 32px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            color: white;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            min-width: 160px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+        }
+
+        .btn-primary {
+            border-color: rgba(255, 0, 51, 0.3);
+        }
+
+        .btn-primary:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 40px var(--accent-glow);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            transform: translateX(-100%);
+            transition: 0.5s;
+        }
+
+        .btn:hover::before {
+            transform: translateX(100%);
+        }
+
+        .icon {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        .particles-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.3; transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .animate-fade-in-up {
-            animation: fadeInUp 0.6s ease-out forwards;
-        }
-        .hover-scale {
-            transition: transform 0.3s ease;
-        }
-        .hover-scale:hover {
-            transform: scale(1.05);
-        }
-        .section-hidden {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-        .section-visible {
-            opacity: 1;
-            transform: translateY(0);
+
+        @keyframes float {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            20% { opacity: 0.4; }
+            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
         }
     </style>
 </head>
-<body class="bg-gray-900 text-white font-sans">
-    <nav class="bg-gray-800 sticky top-0 z-50 shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center">
-                    <h1 class="text-2xl font-bold">BenedekTech</h1>
-                </div>
-                <div class="hidden md:flex space-x-4">
-                    <a href="#home" class="hover:bg-gray-700 px-3 py-2 rounded transition duration-300">Kezdőlap</a>
-                    <a href="#videos" class="hover:bg-gray-700 px-3 py-2 rounded transition duration-300">Videók</a>
-                    <a href="#about" class="hover:bg-gray-700 px-3 py-2 rounded transition duration-300">Rólunk</a>
-                    <a href="#contact" class="hover:bg-gray-700 px-3 py-2 rounded transition duration-300">Kapcsolat</a>
-                </div>
-                <div class="md:hidden">
-                    <button id="menu-btn" class="focus:outline-none">
-                        <i class="fas fa-bars text-2xl"></i>
-                    </button>
-                </div>
-            </div>
-            <div id="mobile-menu" class="hidden md:hidden bg-gray-700">
-                <a href="#home" class="block px-4 py-2 hover:bg-gray-600">Kezdőlap</a>
-                <a href="#videos" class="block px-4 py-2 hover:bg-gray-600">Videók</a>
-                <a href="#about" class="block px-4 py-2 hover:bg-gray-600">Rólunk</a>
-                <a href="#contact" class="block px-4 py-2 hover:bg-gray-600">Kapcsolat</a>
-            </div>
-        </div>
-    </nav>
+<body>
 
-    <section id="home" class="bg-gradient-to-r from-gray-800 to-blue-900 text-white py-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-fade-in-up">
-            <h2 class="text-4xl md:text-5xl font-extrabold mb-4">Üdvözöl a BenedekTech!</h2>
-            <p class="text-xl mb-8">Technológiai újdonságok, tippek és trükkök magyarul, érthetően.</p>
-            <a href="https://www.youtube.com/@BenedekTech?sub_confirmation=1" target="_blank"
-               class="inline-block bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-full text-lg hover-scale">
-                Feliratkozás a YouTube-on
+    <div class="glow-bg"></div>
+    <div class="particles-container" id="particles"></div>
+
+    <div class="container">
+        <h1>benedek.tech</h1>
+        <p>AI • Tech • Future</p>
+
+        <div class="btn-group">
+            <a href="https://youtube.com/@benedektech" target="_blank" class="btn btn-primary">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/>
+                </svg>
+                YouTube
+            </a>
+            
+            <a href="mailto:info@benedek.tech" class="btn">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                </svg>
+                Kapcsolat
             </a>
         </div>
-    </section>
-
-    <section id="videos" class="py-16 section-hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold mb-8 text-center">Kiemelt Videók</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="bg-gray-800 rounded-lg shadow-md overflow-hidden hover-scale">
-                    <iframe class="w-full h-48" src="https://www.youtube.com/embed/VIDEO_ID_1" 
-                            title="Videó címe 1" frameborder="0" allowfullscreen></iframe>
-                    <div class="p-4">
-                        <h3 class="text-lg font-semibold mb-2">Legújabb okostelefon teszt</h3>
-                        <p class="text-gray-400">Ismerd meg a legújabb technológiai csodát!</p>
-                        <a href="https://www.youtube.com/watch?v=VIDEO_ID_1" target="_blank"
-                           class="text-blue-400 hover:underline mt-2 inline-block">Megnézem</a>
-                    </div>
-                </div>
-                <div class="bg-gray-800 rounded-lg shadow-md overflow-hidden hover-scale">
-                    <iframe class="w-full h-48" src="https://www.youtube.com/embed/VIDEO_ID_2" 
-                            title="Videó címe 2" frameborder="0" allowfullscreen></iframe>
-                    <div class="p-4">
-                        <h3 class="text-lg font-semibold mb-2">Hogyan válassz laptopot?</h3>
-                        <p class="text-gray-400">Minden, amit vásárlás előtt tudnod kell.</p>
-                        <a href="https://www.youtube.com/watch?v=VIDEO_ID_2" target="_blank"
-                           class="text-blue-400 hover:underline mt-2 inline-block">Megnézem</a>
-                    </div>
-                </div>
-                <div class="bg-gray-800 rounded-lg shadow-md overflow-hidden hover-scale">
-                    <iframe class="w-full h-48" src="https://www.youtube.com/embed/VIDEO_ID_3" 
-                            title="Videó címe 3" frameborder="0" allowfullscreen></iframe>
-                    <div class="p-4">
-                        <h3 class="text-lg font-semibold mb-2">Szoftver tippek kezdőknek</h3>
-                        <p class="text-gray-400">Hasznos trükkök a mindennapokra.</p>
-                        <a href="https://www.youtube.com/watch?v=VIDEO_ID_3" target="_blank"
-                           class="text-blue-400 hover:underline mt-2 inline-block">Megnézem</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="about" class="bg-gray-800 py-16 section-hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold mb-8 text-center">A BenedekTech-ről</h2>
-            <div class="flex flex-col md:flex-row items-center">
-                <div class="md:w-1/2 mb-8 md:mb-0">
-                    <img src="benedektechlogo.png" 
-                         alt="BenedekTech Logo" class="rounded-lg shadow-md hover-scale">
-                </div>
-                <div class="md:w-1/2 md:pl-8">
-                    <p class="text-lg text-gray-300 mb-4">
-                        A BenedekTech egy magyar YouTube csatorna, amely a legújabb technológiai trendekkel, 
-                        gadgetekkel és hasznos tippekkel foglalkozik. Célunk, hogy közérthető módon mutassuk 
-                        be a tech világ újdonságait, segítve ezzel a nézőinket a digitális világban való 
-                        eligazodásban.
-                    </p>
-                    <p class="text-lg text-gray-300">
-                        Csatlakozz hozzánk, és légy részese a technológia izgalmas világának!
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="contact" class="py-16 section-hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold mb-8 text-center">Kapcsolat</h2>
-            <div class="max-w-lg mx-auto">
-                <div class="mb-4">
-                    <p class="text-lg text-gray-300 mb-2">
-                        <i class="fas fa-envelope mr-2"></i>Email: <a href="mailto:info@benedek.tech" 
-                        class="text-blue-400 hover:underline">info@benedek.tech</a>
-                    </p>
-                    <p class="text-lg text-gray-300">
-                        <i class="fab fa-youtube mr-2"></i>YouTube: <a href="https://www.youtube.com/@BenedekTech" 
-                        target="_blank" class="text-blue-400 hover:underline">@BenedekTech</a>
-                    </p>
-                </div>
-                <div class="flex justify-center space-x-4">
-                    <a href="https://www.youtube.com/@BenedekTech?sub_confirmation=1" target="_blank"
-                       class="text-red-600 hover:text-red-700 text-2xl hover-scale">
-                        <i class="fab fa-youtube"></i>
-                    </a>
-                    <a href="https://twitter.com/BenedekTech" target="_blank"
-                       class="text-blue-400 hover:text-blue-500 text-2xl hover-scale">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <a href="https://www.instagram.com/BenedekTech" target="_blank"
-                       class="text-pink-600 hover:text-pink-700 text-2xl hover-scale">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer class="bg-gray-900 text-gray-300 py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p>© 2025 BenedekTech. Minden jog fenntartva.</p>
-        </div>
-    </footer>
+    </div>
 
     <script>
-        const menuBtn = document.getElementById('menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        menuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
+        const createParticles = () => {
+            const container = document.getElementById('particles');
+            const count = window.innerWidth < 768 ? 20 : 50;
 
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+            for (let i = 0; i < count; i++) {
+                const p = document.createElement('div');
+                p.classList.add('particle');
+                
+                const size = Math.random() * 3 + 1;
+                p.style.width = `${size}px`;
+                p.style.height = `${size}px`;
+                
+                p.style.left = `${Math.random() * 100}%`;
+                
+                const duration = Math.random() * 15 + 10;
+                p.style.animation = `float ${duration}s linear infinite`;
+                p.style.animationDelay = `-${Math.random() * duration}s`;
+                
+                container.appendChild(p);
+            }
+        };
+
+        createParticles();
+
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('mousemove', e => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                btn.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(255,255,255,0.1), var(--glass))`;
+            });
+
+            btn.addEventListener('mouseleave', () => {
+                btn.style.background = 'var(--glass)';
             });
         });
-
-        const sections = document.querySelectorAll('.section-hidden');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('section-visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1 });
-        sections.forEach(section => observer.observe(section));
     </script>
 </body>
 </html>
